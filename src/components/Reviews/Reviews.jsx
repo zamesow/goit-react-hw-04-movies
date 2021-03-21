@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
-
-const URL = 'https://api.themoviedb.org/3/movie';
-const API = '4f24a465004dec8d1f65f162bb769c3a';
 
 class Cast extends Component {
   state = {
@@ -10,36 +6,44 @@ class Cast extends Component {
   };
 
   async componentDidMount() {
-    const { movieId } = this.props.match.params;
-    // const { reviews } = this.props;
+    const { reviews } = this.props;
+    console.log(this.props);
+    //  setTimeout(, 300);
 
-    const response = await Axios.get(
-      `${URL}/${movieId}/reviews?api_key=${API}&language=ru`,
-    );
-    console.log(response.data.results);
-    this.setState({ reviews: response.data.results });
+    this.setState({ reviews });
   }
 
   render() {
+    // const { reviews } = this.state;
     const { reviews } = this.state;
 
+    console.log(reviews.length);
     return (
       <>
         <h1>Reviews</h1>
-        {reviews.length !== 0 ? (
-          <ul>
-            {reviews.map(({ id, author }) => (
-              <li key={id}>
-                <p>{`${author}`}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          'This movie do not have reviews'
-        )}
+
+        <ul>
+          {reviews.map(({ id, author, content }) => (
+            <li key={id}>
+              <h3>{`${author}`}</h3>
+              <p>{`${content}`}</p>
+            </li>
+          ))}
+        </ul>
       </>
     );
   }
 }
 
 export default Cast;
+// {results.length !== 0 ? (
+//           <ul>
+//             {results.map(({ id, author }) => (
+//               <li key={id}>
+//                 <p>{`${author}`}</p>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           'This movie do not have reviews'
+//         )}
