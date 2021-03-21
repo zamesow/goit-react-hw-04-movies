@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
+
+const URL = 'https://api.themoviedb.org/3/movie';
+const API = '4f24a465004dec8d1f65f162bb769c3a';
 
 class Cast extends Component {
   state = {
@@ -6,10 +10,14 @@ class Cast extends Component {
   };
 
   async componentDidMount() {
-    const { reviews } = this.props;
-    console.log(reviews);
+    const { movieId } = this.props.match.params;
+    // const { reviews } = this.props;
 
-    this.setState({ reviews });
+    const response = await Axios.get(
+      `${URL}/${movieId}/reviews?api_key=${API}&language=ru`,
+    );
+    console.log(response.data.results);
+    this.setState({ reviews: response.data.results });
   }
 
   render() {

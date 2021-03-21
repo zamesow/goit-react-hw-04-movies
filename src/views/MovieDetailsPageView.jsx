@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink, Switch, Route } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 import Cast from '../components/Cast';
 import Reviews from '../components/Reviews';
 import Axios from 'axios';
@@ -9,7 +9,7 @@ import Axios from 'axios';
 
 const URL = 'https://api.themoviedb.org/3/movie';
 const API = '4f24a465004dec8d1f65f162bb769c3a';
-const creditsAndReviews = 'append_to_response=credits,reviews';
+const creditsAndReviews = 'append_to_response=credits';
 
 class MovieDetailsPageView extends Component {
   state = {
@@ -20,7 +20,6 @@ class MovieDetailsPageView extends Component {
     vote_average: null,
     poster_path: '',
     cast: [],
-    reviews: [],
   };
 
   async componentDidMount() {
@@ -37,7 +36,6 @@ class MovieDetailsPageView extends Component {
       poster_path:
         'https://image.tmdb.org/t/p/w300' + response.data.poster_path,
       cast: response.data.credits.cast,
-      reviews: response.data.reviews.results,
     });
   }
 
@@ -96,21 +94,18 @@ class MovieDetailsPageView extends Component {
             </NavLink>
           </li>
         </ul>
-
-        <Switch>
-          <Route
-            path="/movies/:movieId/cast"
-            render={props => {
-              return <Cast {...props} cast={cast} />;
-            }}
-          />
-          <Route
-            path="/movies/:movieId/reviews"
-            render={props => {
-              return <Reviews {...props} reviews={reviews} />;
-            }}
-          />
-        </Switch>
+        <Route
+          path="/movies/:movieId/cast"
+          render={props => {
+            return <Cast {...props} cast={cast} />;
+          }}
+        />
+        <Route
+          path="/movies/:movieId/reviews"
+          render={props => {
+            return <Reviews {...props} reviews={reviews} />;
+          }}
+        />
       </>
     );
   }
