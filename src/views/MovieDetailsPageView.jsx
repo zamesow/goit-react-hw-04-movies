@@ -30,8 +30,8 @@ class MovieDetailsPageView extends Component {
       `${URL}/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
     );
 
-    console.log(response.data);
-    console.log(response.data.reviews.results);
+    // console.log(response.data);
+    // console.log(response.data.reviews.results);
 
     this.setState({
       ...response.data,
@@ -57,19 +57,15 @@ class MovieDetailsPageView extends Component {
     const { url } = this.props.match;
     const imgUrl = poster_path;
     const voteAverageInPercent = vote_average * 10 + '%';
-
-    // if (reviews.length === 0) {
-    //   return this.setState({ reviews: 'This movie do not have reviews' });
-    // }
     // console.log(release_date.slice(0, 4));
-    // console.log(imgUrl);
+    console.log(`send:`, cast);
+
     return (
       <>
         <h1>MovieDetailsPage {movieId}</h1>
-        <h2>{`${title} (${release_date.slice(
-          0,
-          4,
-        )}) ${voteAverageInPercent}`}</h2>
+        <h2>
+          {`${title} (${release_date.slice(0, 4)}) ${voteAverageInPercent}`}
+        </h2>
         <img src={`${imgUrl}`} alt={`poster ${title}`} />
         <ul>
           {genres.map(genre => (

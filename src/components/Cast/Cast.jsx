@@ -5,16 +5,27 @@ class Cast extends Component {
     cast: [],
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { cast } = this.props;
-    console.log(this.props.cast);
+    // console.log(`get1:`, cast);
 
     this.setState({ cast });
   }
 
+  // componentDidUpdate(prevProps, prevState) {
+  //   const {cast} = this.props;
+
+  //   if (prevState !== cast) {
+  //     console.log(`update:`, cast);
+  //     // console.log();
+
+  //     this.setState({ cast });
+  //   }
+  // }
+
   render() {
     // const { movieId } = this.props.match.params;
-    const { cast } = this.state;
+    const { cast } = this.props;
 
     return (
       <>

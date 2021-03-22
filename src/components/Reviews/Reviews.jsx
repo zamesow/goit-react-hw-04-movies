@@ -5,19 +5,22 @@ class Cast extends Component {
     reviews: [],
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { reviews } = this.props;
-    console.log(this.props);
-    //  setTimeout(, 300);
+    // console.log(this.props);
 
     this.setState({ reviews });
+
+    if (reviews.length === 0) {
+      this.setState({ reviews: ["We don't have any reviews for this movie"] });
+    }
   }
 
   render() {
     // const { reviews } = this.state;
-    const { reviews } = this.state;
+    const { reviews } = this.props;
 
-    console.log(reviews.length);
+    console.log(reviews);
     return (
       <>
         <h1>Reviews</h1>
@@ -25,8 +28,8 @@ class Cast extends Component {
         <ul>
           {reviews.map(({ id, author, content }) => (
             <li key={id}>
-              <h3>{`${author}`}</h3>
-              <p>{`${content}`}</p>
+              <h3>{author}</h3>
+              <p>{content}</p>
             </li>
           ))}
         </ul>
