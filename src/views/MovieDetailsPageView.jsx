@@ -3,9 +3,8 @@ import { NavLink, Switch, Route } from 'react-router-dom';
 import Cast from '../components/Cast';
 import Reviews from '../components/Reviews';
 import Axios from 'axios';
-// import Cast from './CastView';
-// import Reviews from './ReviewsView';
-// import routes from '../routes';
+
+import m from './MovieDetailsPageView.module.css';
 
 const URL = 'https://api.themoviedb.org/3/movie';
 const API = '4f24a465004dec8d1f65f162bb769c3a';
@@ -53,26 +52,36 @@ class MovieDetailsPageView extends Component {
       cast,
       reviews,
     } = this.state;
-    const { movieId } = this.props.match.params;
+    // const { movieId } = this.props.match.params;
     const { url } = this.props.match;
     const imgUrl = poster_path;
     const voteAverageInPercent = vote_average * 10 + '%';
     // console.log(release_date.slice(0, 4));
-    console.log(`send:`, cast);
+    // console.log(`send:`, cast);
 
     return (
       <>
-        <h1>MovieDetailsPage {movieId}</h1>
-        <h2>
-          {`${title} (${release_date.slice(0, 4)}) ${voteAverageInPercent}`}
-        </h2>
-        <img src={`${imgUrl}`} alt={`poster ${title}`} />
-        <ul>
-          {genres.map(genre => (
-            <li key={genre.id}>{genre.name}</li>
-          ))}
-        </ul>
-        <p>{overview}</p>
+        <div className={m.MovieDetails}>
+          <img src={`${imgUrl}`} alt={`poster ${title}`} />
+          <div className={m.description}>
+            <h1>{`${title} (${release_date.slice(0, 4)})`}</h1>
+            <p>{`User score: ${voteAverageInPercent}`}</p>
+
+            <h3>Overview</h3>
+            <p>{overview}</p>
+
+            <h4>Genres</h4>
+            <ul className={m.genres}>
+              {genres.map(genre => (
+                <li key={genre.id}>{genre.name}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <hr />
+
+        <p>Addidition information</p>
         <ul>
           <li>
             <NavLink
@@ -93,6 +102,8 @@ class MovieDetailsPageView extends Component {
             </NavLink>
           </li>
         </ul>
+
+        <hr />
 
         <Switch>
           <Route
@@ -115,18 +126,6 @@ class MovieDetailsPageView extends Component {
 
 export default MovieDetailsPageView;
 
-// const MovieDetailsPage = () => {
-//   return (
-//     <>
-//
-//       <Switch>
-//         <Route exect path={routes.cast} component={Cast}></Route>
-//         <Route exect path={routes.reviews} component={Reviews}></Route>
-//       </Switch>
-//     </>
-//   );
-// };
-
 // 26. создаём class. Рендерить этот компонент мы хотим после (вместо) списка всех видео, после добавлению к адресу id выбранного фильма, например /books/:bookId - это просто строка, сама по себе ничего не означающая, ":" значит динамический параметр, означает, что реагировать на всё, что будет после /books/. Эту строку адреса мы так же можем записать в раут App...
 
 // 28. переходим на нашей страничке в Movies и смотрим в тулзы, видим, что зарендерен MoviesPageView, смотрим в его проп match и видим, что isExact: true, а path и url совпадают, но это не значит, что они одинаковые...
@@ -146,4 +145,4 @@ export default MovieDetailsPageView;
 // 33. импортируем NavLink, обворачиваем в него Cast и Review и прописываем to="/movies/:movieId/cast" и ".../review". В to= первую часть url нужно тоже писать динамикой, как мы это делали в MoviesPageView to={`${this.props.match.url}/cast`}
 // 34. для добавлеия вложенного свойства Cast в запросе нужно добавить не _embed=credits (_expand=credits), а дополнительный параметр, указаный в доках на сайте &append_to_response=credits после. Смотрим в тулзах на компонент MovieDetailsPageView, на его state.
 // 35. нам нужно передать из MovieDetailsPageView в Cast id фильма, сделать это можно через СПЕЦИАЛЬНЫЙ проп render={props => <Cast {...props} /> }. Передавать нужно ф-цию, в которую будут приходить пропы раутера (history, location, match), они передаются автоматически, если мы передаём через component={}, а через рендер нужно вручную, на выходе наш тег с компонентом и в него распыляем эти пропсы и наш список Cast из стейта.
-// 36. повторяем с Review
+// 36. повторяем с Review и переходим к этим компонентам

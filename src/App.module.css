@@ -1,0 +1,21 @@
+.AppBar {
+  padding: 0px;
+  margin-left: 50px;
+  list-style-type: none;
+}
+
+.AppBar li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.NavLink {
+  text-decoration: none;
+  color: black;
+  font-weight: 700;
+  font-size: larger;
+}
+
+.active {
+  color: brown;
+}

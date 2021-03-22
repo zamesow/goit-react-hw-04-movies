@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Axios from 'axios';
-// import MoviesPage from '../components/MoviesPage';
+// import { Link } from 'react-router-dom';
+// import Axios from 'axios';
 
 // const API = "4f24a465004dec8d1f65f162bb769c3a";
 
 class MoviesPageView extends Component {
-  state = {
-    movies: [],
-  };
+  //   state = {
+  //     movies: [],
+  //   };
 
-  async componentDidMount() {
-    const response = await Axios.get(
-      `https://api.themoviedb.org/3/trending/movie/week?api_key=4f24a465004dec8d1f65f162bb769c3a`,
-    );
-    console.log(response.data.results);
+  //   async componentDidMount() {
+  //     const response = await Axios.get(
+  //       `https://api.themoviedb.org/3/trending/movie/week?api_key=4f24a465004dec8d1f65f162bb769c3a`,
+  //     );
+  //     console.log(response.data.results);
 
-    this.setState({ movies: response.data.results });
-  }
+  //     this.setState({ movies: response.data.results });
+  //   }
 
   render() {
     return (
       <div className="container-fluid">
         <h1>MoviesPage</h1>
-        <ul className="">
-          {this.state.movies.map(movie => (
+        {/* //   <ul className="">
+      //     {this.state.movies.map(movie => (
             // eslint-disable-next-line react/prop-types
             <li key={movie.id}>
               <Link to={`${this.props.match.url}/${movie.id}`}>
@@ -33,26 +32,13 @@ class MoviesPageView extends Component {
             </li>
           ))}
         </ul>
-        {/* <MoviesPage movies={this.state.movies} /> */}
+        <MoviesPage movies={this.state.movies} /> */}
       </div>
     );
   }
 }
 
 export default MoviesPageView;
-
-{
-  /* <Link
-            to={{
-              pathname: `/books/${id}`,
-              state: {
-                from: location,
-              },
-            }}
-          >
-            <MoviesPage imgUrl={imgUrl} title={title} />
-          </Link> */
-}
 
 // 16. Для запроса нам нужен class и state для записи
 // 17. Для запросов импортируем Axios и делаем запрос, когда наш компонент маунтится (нажимаем на ссылку => меняется url в адресной строке => BrowserRouter реагирует и вызывает (маунтит) наш компонент MoviesPageView)
@@ -80,6 +66,7 @@ export default MoviesPageView;
 // 24. консолим этот url (this.props.match.url) и смотрим, что он сходится с нашим to={/movies}  (или смотрим в React Tools - Components)
 // 25. поэтому мы можем вместо статической записи вставить наш динамический проп
 ('---');
-// Теперь насм нужно сделать компонент, который будет рендериться на отдельный фильм - это отдельная страница MovieDetailsPageView
+// Теперь нам нужно сделать компонент, который будет рендериться на отдельный фильм - это отдельная страница MovieDetailsPageView
 ('---');
-// делаем форму для поиска фильмов по ключевому слову
+// 40. переносим весь код из MoviesPageView в HomePageView, т.к. это должна быть страница с формой поиска
+// 41. делаем форму для поиска фильмов по ключевому слову

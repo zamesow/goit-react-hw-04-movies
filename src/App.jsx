@@ -5,66 +5,35 @@ import HomePageView from './views/HomePageView';
 import MoviesPageView from './views/MoviesPageView';
 import MovieDetailsPageView from './views/MovieDetailsPageView';
 import NotFoundView from './views/NotFoundView';
-// import AppBar from './components/AppBar';
-// import routes from './routes';
+
+import m from './App.module.css';
+
+const API = '4f24a465004dec8d1f65f162bb769c3a';
 
 const App = () => (
   <>
-    <ul>
+    <ul className={m.AppBar}>
       <li>
-        <NavLink
-          exact
-          to="/"
-          className="NavLink"
-          activeClassName="NavLink--active"
-        >
+        <NavLink exact to="/" className={m.NavLink} activeClassName={m.active}>
           Home
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/movies/:movieId"
-          className="NavLink"
-          activeClassName="NavLink--active"
-        >
-          MovieDetails
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/movies"
-          className="NavLink"
-          activeClassName="NavLink--active"
-        >
+        <NavLink to="/movies" className={m.NavLink} activeClassName={m.active}>
           Movies
         </NavLink>
       </li>
     </ul>
 
-    {/* <header className="AppBar">
-      <nav className="nav nav-pills">
-            <NavLink
-                exact
-                to={routes.home"
-                className="nav-link"
-                activeClassName="active"
-            >
-                Home
-            </NavLink>
-            <NavLink
-                to={routes.movies}
-                className="nav-link"
-                activeClassName="active">
-                Movies
-            </NavLink>
-        </nav>
-    </header> */}
-    {/* <AppBar /> */}
-
     <Switch>
-      <Route exact path="/" component={HomePageView} />
+      <Route
+        exact
+        path="/"
+        render={props => {
+          return <HomePageView {...props} API={API} />;
+        }}
+      />
       <Route exact path="/movies" component={MoviesPageView} />
-
       <Route path="/movies/:movieId" component={MovieDetailsPageView} />
       <Route component={NotFoundView} />
     </Switch>
@@ -95,7 +64,7 @@ export default App;
 // 11. Если перейдём на (пропишем) несуществующий путь, то нужно отрендерить отдельный компонент, создаём NotFoundView. Если не передать в него путь, то он будет рендериться всегда (если не передать путь во всех раутах, то все компоненты будут рендериться всегда). Поэтому ставим Switch, чтобы выбирался только один из.
 // 12. Импортируем Router.Switch или { Switch }, обворачиваем им все наши рауты
 
-// 13. Для стилизации вместо Link используем NavLink, он использует 2 пропа для объекта инлайн-стилей (создаём const styles = {}) - базовый и активный, но мы будем использовать module.css, поэтому используем classNam и activeClassName, а styles удаляем.
+// 13. Для стилизации вместо Link используем NavLink, он использует 2 пропа для объекта инлайн-стилей (создаём const styles = {}) - базовый и активный, но мы будем использовать module.css, поэтому используем className и activeClassName, а styles удаляем.
 // 14. Проверяем применение классов в Elements и видим, что activeClassName применяется к Home постоянно - это потому что как и в случае с Route path="/", так и в NavLink to="/" нужно использовать exact там, где необходимо для точного совпадения.
 
 // 15. Для общих свойств (например один автор нескольких книг) есть специальные параметры
@@ -106,3 +75,4 @@ export default App;
 ('---');
 // 27. добавляем раут для MovieDetailsPageView (если ещё не добавили) и exact, чтоб не смешивался, либо пишем эту строку ниже остальных, если нельзя exact, потому что Switch работает сверху вниз. => MovieDetailsPageView
 ('---');
+// --- API прописываем в переменной и передаём пропсом в HomePageView
