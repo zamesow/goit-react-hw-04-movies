@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 // import Axios from 'axios';
 
-// const API = "4f24a465004dec8d1f65f162bb769c3a";
-
 class MoviesPageView extends Component {
-  //   state = {
-  //     movies: [],
-  //   };
+  state = {
+    filmQuery: '',
+  };
 
-  //   async componentDidMount() {
-  //     const response = await Axios.get(
-  //       `https://api.themoviedb.org/3/trending/movie/week?api_key=4f24a465004dec8d1f65f162bb769c3a`,
-  //     );
-  //     console.log(response.data.results);
+  handleChange = e => {
+    const { value } = e.currentTarget;
 
-  //     this.setState({ movies: response.data.results });
-  //   }
+    this.setState({ filmQuery: value });
+  };
+
+  async componentDidMount() {
+    // const searchQuery = await Axios.get(
+    //   `https://api.themoviedb.org/3/search/movie?api_key=${API}&language=en-US&page=1&include_adult=false`,
+    // );
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+  };
 
   render() {
     return (
       <div className="container-fluid">
-        <h1>MoviesPage</h1>
-        {/* //   <ul className="">
-      //     {this.state.movies.map(movie => (
-            // eslint-disable-next-line react/prop-types
-            <li key={movie.id}>
-              <Link to={`${this.props.match.url}/${movie.id}`}>
-                {movie.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <MoviesPage movies={this.state.movies} /> */}
+        <form className="code" onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            value={this.state.filmQuery}
+            onChange={this.handleChange}
+          />
+
+          <button type="submit">Search</button>
+        </form>
       </div>
     );
   }
