@@ -5,6 +5,7 @@ import HomePageView from './views/HomePageView';
 import MoviesPageView from './views/MoviesPageView';
 import MovieDetailsPageView from './views/MovieDetailsPageView';
 import NotFoundView from './views/NotFoundView';
+// import SearchMovies from './components/SearchMovies';
 
 import m from './App.module.css';
 
@@ -47,6 +48,13 @@ const App = () => (
           return <MovieDetailsPageView {...props} API={API} fetch={fetch} />;
         }}
       />
+      {/* <Route
+        exact
+        path="/movies:query"
+        render={props => {
+          return <SearchMovies {...props} API={API} fetch={fetch} />;
+        }}
+      /> */}
       <Route component={NotFoundView} />
     </Switch>
   </>

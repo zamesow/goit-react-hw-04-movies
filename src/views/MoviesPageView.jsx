@@ -20,11 +20,12 @@ class MoviesPageView extends Component {
         `${fetch}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
       );
 
-      console.log(searchQuery.data.results);
+      // console.log(searchQuery.data.results);
 
       this.setState({
         movies: searchQuery.data.results,
         status: 'resolved',
+        formValue: '',
       });
     }
   }
@@ -52,8 +53,8 @@ class MoviesPageView extends Component {
     const { url } = this.props.match;
     return (
       <>
-        <div className="container-fluid">
-          <form className="code" onSubmit={this.handleSubmit}>
+        <div className="">
+          <form className="" onSubmit={this.handleSubmit}>
             <input
               type="text"
               name="name"
@@ -65,12 +66,25 @@ class MoviesPageView extends Component {
           </form>
         </div>
 
+        {/* {
+        <div>
+          <h2>SearchMovies</h2>
+          <ul className="">
+            {movies.map(({ id, title }) => (
+              <li key={id}>
+                <Link to={`${url}/${id}`}>{title}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        } */}
+
         <SearchMovies movies={movies} url={url} />
 
         {/* <Route
           path={`/movies&query=${searchFilms}`}
           render={props => {
-            return <SearchMovies {...props} searchFilms={this.state.searchFilms} />;
+            return <SearchMovies {...props} movies={movies} url={url} />;
           }}
         /> */}
       </>

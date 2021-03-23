@@ -25,8 +25,8 @@ class HomePageView extends Component {
     // console.log(url);
     return (
       <>
-        <div className="container-fluid">
-          <h1>HomePage</h1>
+        <div>
+          <h1>Trending today</h1>
           <ul className="">
             {movies.map(movie => (
               // eslint-disable-next-line react/prop-types
