@@ -22,11 +22,11 @@ class MovieDetailsPageView extends Component {
   };
 
   async componentDidMount() {
-    const { API, fetch } = this.props;
+    const { API, mainUrl } = this.props;
     const { movieId } = this.props.match.params;
 
     const response = await Axios.get(
-      `${fetch}/movie/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
+      `${mainUrl}/movie/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
     );
 
     // console.log(response.data);
@@ -53,7 +53,7 @@ class MovieDetailsPageView extends Component {
       reviews,
     } = this.state;
     // const { movieId } = this.props.match.params;
-    const { url } = this.props.match;
+    const { url, path } = this.props.match;
     const imgUrl = poster_path;
     const voteAverageInPercent = vote_average * 10 + '%';
     // console.log(release_date.slice(0, 4));
@@ -107,13 +107,13 @@ class MovieDetailsPageView extends Component {
 
         <Switch>
           <Route
-            path="/movies/:movieId/cast"
+            path={`${path}/cast`}
             render={props => {
               return <Cast {...props} cast={cast} />;
             }}
           />
           <Route
-            path="/movies/:movieId/reviews"
+            path={`${path}/reviews`}
             render={props => {
               return <Reviews {...props} reviews={reviews} />;
             }}

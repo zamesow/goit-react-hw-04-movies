@@ -8,11 +8,11 @@ class HomePageView extends Component {
   };
 
   async componentDidMount() {
-    const { API, fetch } = this.props;
+    const { API, mainUrl } = this.props;
     // console.log(this.props);
 
     const response = await Axios.get(
-      `${fetch}/trending/movie/week?api_key=${API}`,
+      `${mainUrl}/trending/movie/week?api_key=${API}`,
     );
     // console.log(response.data.results);
 

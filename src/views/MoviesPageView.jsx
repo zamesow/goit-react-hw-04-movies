@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Axios from 'axios';
 import SearchMovies from '../components/SearchMovies';
 
@@ -12,16 +12,14 @@ class MoviesPageView extends Component {
   };
 
   async componentDidUpdate() {
-    const { API, fetch } = this.props;
+    const { API, mainUrl } = this.props;
     const { searchFilms, status } = this.state;
     // const { filmQuery } = this.props;
     if (status === 'pending') {
       const searchQuery = await Axios.get(
-        `${fetch}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
+        `${mainUrl}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
       );
-
       // console.log(searchQuery.data.results);
-
       this.setState({
         movies: searchQuery.data.results,
         status: 'resolved',
@@ -50,7 +48,7 @@ class MoviesPageView extends Component {
 
   render() {
     const { movies } = this.state;
-    const { url } = this.props.match;
+    const { url, path } = this.props.match;
     return (
       <>
         <div className="">
@@ -66,27 +64,14 @@ class MoviesPageView extends Component {
           </form>
         </div>
 
-        {/* {
-        <div>
-          <h2>SearchMovies</h2>
-          <ul className="">
-            {movies.map(({ id, title }) => (
-              <li key={id}>
-                <Link to={`${url}/${id}`}>{title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        } */}
+        {/* <SearchMovies movies={movies} url={url} /> */}
 
-        <SearchMovies movies={movies} url={url} />
-
-        {/* <Route
-          path={`/movies&query=${searchFilms}`}
+        <Route
+          path={`${path}`}
           render={props => {
             return <SearchMovies {...props} movies={movies} url={url} />;
           }}
-        /> */}
+        />
       </>
     );
   }
@@ -94,6 +79,12 @@ class MoviesPageView extends Component {
 
 export default MoviesPageView;
 
+// status:
+// --- 'idle', - простаивание
+// --- 'pending', - ожидание
+// --- 'resolved', - разрешение
+// --- 'rejected' - отклонение
+('---');
 // 16. Для запроса нам нужен class и state для записи
 // 17. Для запросов импортируем Axios и делаем запрос, когда наш компонент маунтится (нажимаем на ссылку => меняется url в адресной строке => BrowserRouter реагирует и вызывает (маунтит) наш компонент MoviesPageView)
 // 18. В консоли видим результат запроса, записываем массив фильмов в state (каждый раз заново, не от предыдущего)
@@ -126,10 +117,19 @@ export default MoviesPageView;
 // 41. делаем форму для поиска фильмов по ключевому слову
 // --- форма с onSubmit и без label
 // --- input с type, name, value, onChange
-// --- кнопка
-
-// status:
-// --- 'idle', - простаивание
-// --- 'pending', - ожидание
-// --- 'resolved', - разрешение
-// --- 'rejected' - отклонение
+// ------ value должно отображать то, что записывается в state
+// ------ onChange должен вызывать метод handleChange, который
+// --- кнопка submit
+// 42. handleChange записывает в state значение {value} (с нижним регистром) в событии e.currentTarget
+// 43. handleSubmit должен иметь неперегружайку e.preventDefault();
+// --- достаёт значение formValue из state и переписывает его в searchFilms
+// --- переписывает статус на одидающий
+// 44. при componentDidUpdate нужно обязательно задать условие if()
+// --- при смене статуса делаем запрос
+// --- меняем статус на подтверждённый
+// --- пишем ответ в state.movies
+// --- очищаем форму
+// 45. рендерим с пропами <SearchMovies movies={this.state.movies} url={this.props.match.url} />
+// 46. переделываем на внутреннюю маршрутизацию Route
+// --- в path мы используем динамику, но не match.url, а match.path
+('---');

@@ -10,7 +10,7 @@ import NotFoundView from './views/NotFoundView';
 import m from './App.module.css';
 
 const API = '4f24a465004dec8d1f65f162bb769c3a';
-const fetch = 'https://api.themoviedb.org/3';
+const mainUrl = 'https://api.themoviedb.org/3';
 
 const App = () => (
   <>
@@ -32,27 +32,29 @@ const App = () => (
         exact
         path="/"
         render={props => {
-          return <HomePageView {...props} API={API} fetch={fetch} />;
+          return <HomePageView {...props} API={API} mainUrl={mainUrl} />;
         }}
       />
       <Route
         exact
         path="/movies"
         render={props => {
-          return <MoviesPageView {...props} API={API} fetch={fetch} />;
+          return <MoviesPageView {...props} API={API} mainUrl={mainUrl} />;
         }}
       />
       <Route
         path="/movies/:movieId"
         render={props => {
-          return <MovieDetailsPageView {...props} API={API} fetch={fetch} />;
+          return (
+            <MovieDetailsPageView {...props} API={API} mainUrl={mainUrl} />
+          );
         }}
       />
       {/* <Route
         exact
         path="/movies:query"
         render={props => {
-          return <SearchMovies {...props} API={API} fetch={fetch} />;
+          return <SearchMovies {...props} API={API} mainUrl={mainUrl} />;
         }}
       /> */}
       <Route component={NotFoundView} />
@@ -95,4 +97,10 @@ export default App;
 ('---');
 // 27. добавляем раут для MovieDetailsPageView (если ещё не добавили) и exact, чтоб не смешивался, либо пишем эту строку ниже остальных, если нельзя exact, потому что Switch работает сверху вниз. => MovieDetailsPageView
 ('---');
-// --- API и адрес запроса прописываем в переменные и передаём пропсами во все рауты
+// --- API и адрес запроса mainUrl прописываем в переменные и передаём пропсами во все рауты
+('---');
+// status:
+// --- 'idle', - простаивание
+// --- 'pending', - ожидание
+// --- 'resolved', - разрешение
+// --- 'rejected' - отклонение

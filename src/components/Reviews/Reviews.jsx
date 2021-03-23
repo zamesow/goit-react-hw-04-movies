@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Cast extends Component {
+class Reviews extends Component {
   render() {
     const { reviews } = this.props;
 
     // console.log(reviews);
     return (
       <>
-        {reviews && "We don't have any reviews for this movie"}
+        {reviews.length === 0 && "We don't have any reviews for this movie"}
 
         <ul>
           {reviews.map(({ id, author, content }) => (
@@ -22,7 +22,7 @@ class Cast extends Component {
   }
 }
 
-export default Cast;
+export default Reviews;
 
 // 38. рендерим пришедший пропс (почему-то не работает с ф-цией, а только с классом)
 // 39. теперь страница HomePageView
