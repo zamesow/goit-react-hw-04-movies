@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import m from './Cast.module.css';
 
 class Cast extends Component {
   render() {
@@ -8,9 +9,14 @@ class Cast extends Component {
       <>
         <h1>Cast</h1>
 
-        <ul>
-          {cast.map(({ id, original_name }) => (
-            <li key={id}>
+        <ul className={m.cast}>
+          {cast.map(({ id, original_name, profile_path }) => (
+            <li className={m.castItem} key={id}>
+              <img
+                className={m.pic}
+                src={`https://image.tmdb.org/t/p/w200${profile_path}`}
+                alt=""
+              />
               <p>{original_name}</p>
             </li>
           ))}

@@ -4,15 +4,15 @@ class Cast extends Component {
   render() {
     const { reviews } = this.props;
 
-    console.log(reviews);
+    // console.log(reviews);
     return (
       <>
-        <h1>Reviews</h1>
+        {reviews && "We don't have any reviews for this movie"}
 
         <ul>
           {reviews.map(({ id, author, content }) => (
             <li key={id}>
-              <h3>{author}</h3>
+              <h3>{`Author: ${author}`}</h3>
               <p>{content}</p>
             </li>
           ))}

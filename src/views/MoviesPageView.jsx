@@ -1,41 +1,79 @@
 import React, { Component } from 'react';
-// import Axios from 'axios';
+// import { Route } from 'react-router-dom';
+import Axios from 'axios';
+import SearchMovies from '../components/SearchMovies';
 
 class MoviesPageView extends Component {
   state = {
-    filmQuery: '',
+    formValue: '',
+    searchFilms: '',
+    movies: [],
+    status: 'idle',
   };
+
+  async componentDidUpdate() {
+    const { API, fetch } = this.props;
+    const { searchFilms, status } = this.state;
+    // const { filmQuery } = this.props;
+    if (status === 'pending') {
+      const searchQuery = await Axios.get(
+        `${fetch}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
+      );
+
+      console.log(searchQuery.data.results);
+
+      this.setState({
+        movies: searchQuery.data.results,
+        status: 'resolved',
+      });
+    }
+  }
 
   handleChange = e => {
     const { value } = e.currentTarget;
 
-    this.setState({ filmQuery: value });
+    this.setState({ formValue: value.toLowerCase() });
   };
-
-  async componentDidMount() {
-    // const searchQuery = await Axios.get(
-    //   `https://api.themoviedb.org/3/search/movie?api_key=${API}&language=en-US&page=1&include_adult=false`,
-    // );
-  }
 
   handleSubmit = e => {
     e.preventDefault();
+    const { formValue } = this.state;
+
+    // this.props.onSubmit(searchFilms);
+    this.setState({
+      searchFilms: formValue,
+      status: 'pending',
+      // formValue: '',
+    });
   };
 
   render() {
+    const { movies } = this.state;
+    const { url } = this.props.match;
     return (
-      <div className="container-fluid">
-        <form className="code" onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            value={this.state.filmQuery}
-            onChange={this.handleChange}
-          />
+      <>
+        <div className="container-fluid">
+          <form className="code" onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              value={this.state.formValue}
+              onChange={this.handleChange}
+            />
 
-          <button type="submit">Search</button>
-        </form>
-      </div>
+            <button type="submit">Search</button>
+          </form>
+        </div>
+
+        <SearchMovies movies={movies} url={url} />
+
+        {/* <Route
+          path={`/movies&query=${searchFilms}`}
+          render={props => {
+            return <SearchMovies {...props} searchFilms={this.state.searchFilms} />;
+          }}
+        /> */}
+      </>
     );
   }
 }
@@ -51,7 +89,7 @@ export default MoviesPageView;
 // 21. Нам нужно из названия сделать ссылку, но чтоб страница не перезагружалась - это { Link }, импортируем обворачиваем в него наши title
 // 22. В проп to="" нужно вставить не статический, а динамический адрес, а чтоб у каждой книги был свой - определителем будет id
 ('---');
-// 23. Использование во вложенной навигации постоянно в to= /movies - это антипаттерн магических строк, это плохо, потому что /movies уже используется под основную навигацию. Когда Route path="" совпадает с текущим url (pathname)? то зарендеренный компонент (например наш MoviePageView) получает от react-router три дополнительных пропса:
+// 23. Использование во вложенной навигации постоянно в to= /movies - это антипаттерн магических строк, это плохо, потому что /movies уже используется под основную навигацию. Когда Route path="" совпадает с текущим url (pathname)? то зарендеренный компонент (например наш MoviesPageView) получает от react-router три дополнительных пропса:
 // - history (объект для работы с историей)
 // - location (обьект, описывающий текущий путь в адресной строке, url)
 // --- hash: "" (описывает якорь)
@@ -72,3 +110,12 @@ export default MoviesPageView;
 ('---');
 // 40. переносим весь код из MoviesPageView в HomePageView, т.к. это должна быть страница с формой поиска
 // 41. делаем форму для поиска фильмов по ключевому слову
+// --- форма с onSubmit и без label
+// --- input с type, name, value, onChange
+// --- кнопка
+
+// status:
+// --- 'idle', - простаивание
+// --- 'pending', - ожидание
+// --- 'resolved', - разрешение
+// --- 'rejected' - отклонение

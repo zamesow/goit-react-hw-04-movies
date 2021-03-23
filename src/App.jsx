@@ -9,6 +9,7 @@ import NotFoundView from './views/NotFoundView';
 import m from './App.module.css';
 
 const API = '4f24a465004dec8d1f65f162bb769c3a';
+const fetch = 'https://api.themoviedb.org/3';
 
 const App = () => (
   <>
@@ -30,11 +31,22 @@ const App = () => (
         exact
         path="/"
         render={props => {
-          return <HomePageView {...props} API={API} />;
+          return <HomePageView {...props} API={API} fetch={fetch} />;
         }}
       />
-      <Route exact path="/movies" component={MoviesPageView} />
-      <Route path="/movies/:movieId" component={MovieDetailsPageView} />
+      <Route
+        exact
+        path="/movies"
+        render={props => {
+          return <MoviesPageView {...props} API={API} fetch={fetch} />;
+        }}
+      />
+      <Route
+        path="/movies/:movieId"
+        render={props => {
+          return <MovieDetailsPageView {...props} API={API} fetch={fetch} />;
+        }}
+      />
       <Route component={NotFoundView} />
     </Switch>
   </>
@@ -75,4 +87,4 @@ export default App;
 ('---');
 // 27. добавляем раут для MovieDetailsPageView (если ещё не добавили) и exact, чтоб не смешивался, либо пишем эту строку ниже остальных, если нельзя exact, потому что Switch работает сверху вниз. => MovieDetailsPageView
 ('---');
-// --- API прописываем в переменной и передаём пропсом в HomePageView
+// --- API и адрес запроса прописываем в переменные и передаём пропсами во все рауты

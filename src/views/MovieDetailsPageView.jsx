@@ -6,8 +6,7 @@ import Axios from 'axios';
 
 import m from './MovieDetailsPageView.module.css';
 
-const URL = 'https://api.themoviedb.org/3/movie';
-const API = '4f24a465004dec8d1f65f162bb769c3a';
+// const URL = 'https://api.themoviedb.org/3/movie';
 const creditsAndReviews = 'append_to_response=credits,reviews';
 
 class MovieDetailsPageView extends Component {
@@ -23,10 +22,11 @@ class MovieDetailsPageView extends Component {
   };
 
   async componentDidMount() {
+    const { API, fetch } = this.props;
     const { movieId } = this.props.match.params;
 
     const response = await Axios.get(
-      `${URL}/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
+      `${fetch}/movie/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
     );
 
     // console.log(response.data);

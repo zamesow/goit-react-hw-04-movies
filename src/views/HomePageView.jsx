@@ -8,11 +8,11 @@ class HomePageView extends Component {
   };
 
   async componentDidMount() {
-    const { API } = this.props;
+    const { API, fetch } = this.props;
     // console.log(this.props);
 
     const response = await Axios.get(
-      `https://api.themoviedb.org/3/trending/movie/week?api_key=${API}`,
+      `${fetch}/trending/movie/week?api_key=${API}`,
     );
     // console.log(response.data.results);
 
@@ -35,7 +35,7 @@ class HomePageView extends Component {
               </li>
             ))}
           </ul>
-          {/* <MoviesPage movies={this.state.movies} /> */}
+          {/* <SearchMovies movies={this.state.movies} /> */}
         </div>
       </>
     );
