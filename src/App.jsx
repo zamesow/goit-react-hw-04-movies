@@ -50,13 +50,6 @@ const App = () => (
           );
         }}
       />
-      {/* <Route
-        exact
-        path="/movies:query"
-        render={props => {
-          return <SearchMovies {...props} API={API} mainUrl={mainUrl} />;
-        }}
-      /> */}
       <Route component={NotFoundView} />
     </Switch>
   </>

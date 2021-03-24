@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { NavLink, Switch, Route } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 import Cast from '../components/Cast';
 import Reviews from '../components/Reviews';
 import Axios from 'axios';
 
 import m from './MovieDetailsPageView.module.css';
-
-// const URL = 'https://api.themoviedb.org/3/movie';
-const creditsAndReviews = 'append_to_response=credits,reviews';
 
 class MovieDetailsPageView extends Component {
   state = {
@@ -24,6 +21,7 @@ class MovieDetailsPageView extends Component {
   async componentDidMount() {
     const { API, mainUrl } = this.props;
     const { movieId } = this.props.match.params;
+    const creditsAndReviews = 'append_to_response=credits,reviews';
 
     const response = await Axios.get(
       `${mainUrl}/movie/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
@@ -52,7 +50,6 @@ class MovieDetailsPageView extends Component {
       cast,
       reviews,
     } = this.state;
-    // const { movieId } = this.props.match.params;
     const { url, path } = this.props.match;
     const imgUrl = poster_path;
     const voteAverageInPercent = vote_average * 10 + '%';
@@ -82,6 +79,7 @@ class MovieDetailsPageView extends Component {
         <hr />
 
         <p>Addidition information</p>
+
         <ul>
           <li>
             <NavLink
@@ -105,20 +103,18 @@ class MovieDetailsPageView extends Component {
 
         <hr />
 
-        <Switch>
-          <Route
-            path={`${path}/cast`}
-            render={props => {
-              return <Cast {...props} cast={cast} />;
-            }}
-          />
-          <Route
-            path={`${path}/reviews`}
-            render={props => {
-              return <Reviews {...props} reviews={reviews} />;
-            }}
-          />
-        </Switch>
+        <Route
+          path={`${path}/cast`}
+          render={props => {
+            return <Cast {...props} cast={cast} />;
+          }}
+        />
+        <Route
+          path={`${path}/reviews`}
+          render={props => {
+            return <Reviews {...props} reviews={reviews} />;
+          }}
+        />
       </>
     );
   }
@@ -133,6 +129,7 @@ export default MovieDetailsPageView;
 // смотрим на проп params и видим, что у него идёт определение {path: url}, это как раз потому что в нашем рауте в path стоит динамический параметр ":", означающий, что запись после него movieId - это лишь переменная.
 // 29. поэтому, чтобы при переходе на страницу одной книги нам сразу писался идентификатор фильма, мы може писать в заглавии {this.props.match.params.movieId}
 // доступ к идентификатору нужен не для названия, а для нового запроса к фильму по id? потому что на эту страницу мы можем перейти не только из /movies, но и набрав вручную, а если до этого небыло запроса на все книги, то и из state в /movies нечего брать
+// --- при маунте можем консолить пропсы для наглядности
 // 30. делаем запрос при маунте, где параметром книги делаем наш проп с id. Поэтому тут class.
 // 31. приходит объект со свойством data и у того объект свойств. Все свойства нам не нужны, поэтому мы можем выбрать необходимые, записать их в стейт и распылить нужный ответ в стейт.
 // 32. Рендерим разметку:
@@ -146,3 +143,4 @@ export default MovieDetailsPageView;
 // 34. для добавлеия вложенного свойства Cast в запросе нужно добавить не _embed=credits (_expand=credits), а дополнительный параметр, указаный в доках на сайте &append_to_response=credits после. Смотрим в тулзах на компонент MovieDetailsPageView, на его state.
 // 35. нам нужно передать из MovieDetailsPageView в Cast id фильма, сделать это можно через СПЕЦИАЛЬНЫЙ проп render={props => <Cast {...props} /> }. Передавать нужно ф-цию, в которую будут приходить пропы раутера (history, location, match), они передаются автоматически, если мы передаём через component={}, а через рендер нужно вручную, на выходе наш тег с компонентом и в него распыляем эти пропсы и наш список Cast из стейта.
 // 36. повторяем с Review и переходим к этим компонентам
+('---');

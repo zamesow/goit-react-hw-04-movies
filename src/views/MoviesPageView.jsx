@@ -42,7 +42,6 @@ class MoviesPageView extends Component {
     this.setState({
       searchFilms: formValue,
       status: 'pending',
-      // formValue: '',
     });
   };
 
@@ -63,8 +62,6 @@ class MoviesPageView extends Component {
             <button type="submit">Search</button>
           </form>
         </div>
-
-        {/* <SearchMovies movies={movies} url={url} /> */}
 
         <Route
           path={`${path}`}
@@ -124,7 +121,8 @@ export default MoviesPageView;
 // 43. handleSubmit должен иметь неперегружайку e.preventDefault();
 // --- достаёт значение formValue из state и переписывает его в searchFilms
 // --- переписывает статус на одидающий
-// 44. при componentDidUpdate нужно обязательно задать условие if()
+// 44. Т.к. у нас state перезаписывается каждый раз при изменениях в форме, то для запроса нужно использовать componentDidUpdate, потому что только в этом случае будет запрос последних изменений в форме
+// --- при componentDidUpdate нужно обязательно задать условие if () иначе цикличность
 // --- при смене статуса делаем запрос
 // --- меняем статус на подтверждённый
 // --- пишем ответ в state.movies
@@ -132,4 +130,7 @@ export default MoviesPageView;
 // 45. рендерим с пропами <SearchMovies movies={this.state.movies} url={this.props.match.url} />
 // 46. переделываем на внутреннюю маршрутизацию Route
 // --- в path мы используем динамику, но не match.url, а match.path
+// 47. переиспользуем компонент SearchMovies закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
+// 48.
 ('---');
+// --- для законсоливания данных, можно использовать по данным в state или props метод .find()
