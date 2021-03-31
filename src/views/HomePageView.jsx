@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+// import { withRoutetr } from 'react-router-dom';
 import Axios from 'axios';
-import SearchMovies from '../components/SearchMovies';
+import MoviesList from '../components/MoviesList';
+import m from './MoviesPageView.module.css';
 
 class HomePageView extends Component {
   state = {
@@ -22,23 +23,13 @@ class HomePageView extends Component {
 
   render() {
     const { movies } = this.state;
-    const { url, path } = this.props.match;
-    // console.log(url);
     return (
-      <>
+      <div className={m.container}>
+        <h1 className={m.headBlock}>Trending today</h1>
         <div>
-          <h1>Trending today</h1>
-
-          <Route
-            path={`${path}`}
-            render={props => {
-              return (
-                <SearchMovies {...props} movies={movies} url={`${url}movies`} />
-              );
-            }}
-          />
+          <MoviesList movies={movies} />
         </div>
-      </>
+      </div>
     );
   }
 }
@@ -49,4 +40,4 @@ export default HomePageView;
 // --- меняем, где нужно ссылки и адреса с MoviesPageView на HomePageView
 // --- в Link нужно добавить "movies" потому что в match.url уже не "/movies", а просто "/"
 // --- API выносим в App и передаём сюда пропсом
-// 47. переиспользуем компонент SearchMovies закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
+// 47. переиспользуем компонент MoviesList закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}

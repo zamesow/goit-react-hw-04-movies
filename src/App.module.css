@@ -1,15 +1,15 @@
 .AppBar {
+  width: 700px;
+  margin: auto;
   padding: 0px;
-  margin-left: 50px;
   list-style-type: none;
-}
-
-.AppBar li {
-  display: inline;
-  margin-right: 10px;
+  text-align: center;
 }
 
 .NavLink {
+  display: inline;
+  margin-left: 10px;
+  margin-right: 10px;
   text-decoration: none;
   color: black;
   font-weight: 700;

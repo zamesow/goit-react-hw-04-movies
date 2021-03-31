@@ -1,0 +1,26 @@
+.MoviePreview-thumb {
+  height: 300px;
+  width: 200px;
+}
+
+.MoviePreview-thumb > img {
+  display: block;
+  margin-left: 30px;
+  margin-right: 30px;
+
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  object-position: top;
+}
+
+.MoviePreview-titleBlock {
+  margin: 0;
+  text-align: center;
+}
+
+.MoviePreview-title {
+  margin: 0;
+  text-align: center;
+  text-decoration: none;
+}

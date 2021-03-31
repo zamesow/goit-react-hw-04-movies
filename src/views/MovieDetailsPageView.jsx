@@ -8,11 +8,11 @@ import m from './MovieDetailsPageView.module.css';
 
 class MovieDetailsPageView extends Component {
   state = {
-    title: null,
+    title: '',
     genres: [],
-    overview: null,
+    overview: '',
     release_date: '',
-    vote_average: null,
+    vote_average: '',
     poster_path: '',
     cast: [],
     reviews: [],
@@ -58,63 +58,80 @@ class MovieDetailsPageView extends Component {
 
     return (
       <>
-        <div className={m.MovieDetails}>
-          <img src={`${imgUrl}`} alt={`poster ${title}`} />
-          <div className={m.description}>
-            <h1>{`${title} (${release_date.slice(0, 4)})`}</h1>
-            <p>{`User score: ${voteAverageInPercent}`}</p>
+        <button
+          className={m.backBtn}
+          type="button"
+          onClick={() => this.props.history.push('/movies')}
+        >
+          Назад
+        </button>
+        {title && (
+          <div>
+            <div className={m.MovieDetails}>
+              <img src={`${imgUrl}`} alt={`poster ${title}`} />
+              <div className={m.description}>
+                <h1>{`${title} (${
+                  release_date ? release_date.slice(0, 4) : 'Coming soon'
+                })`}</h1>
+                {vote_average ? (
+                  <p>{`User score: ${voteAverageInPercent}`}</p>
+                ) : (
+                  ''
+                )}
 
-            <h3>Overview</h3>
-            <p>{overview}</p>
+                {overview && <h3>Overview</h3>}
+                <p>{overview}</p>
 
-            <h4>Genres</h4>
-            <ul className={m.genres}>
-              {genres.map(genre => (
-                <li key={genre.id}>{genre.name}</li>
-              ))}
+                <h4>Genres</h4>
+                <ul className={m.genres}>
+                  {genres.map(({ id, name }) => (
+                    <li key={id}>{name}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <hr />
+
+            <p>Addidition information</p>
+
+            <ul>
+              <li>
+                <NavLink
+                  to={`${url}/cast`}
+                  className="NavLink"
+                  activeClassName="NavLink--active"
+                >
+                  Cast
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={`${url}/reviews`}
+                  className="NavLink"
+                  activeClassName="NavLink--active"
+                >
+                  Reviews
+                </NavLink>
+              </li>
             </ul>
+
+            <hr />
+
+            <Route
+              path={`${path}/cast`}
+              render={props => {
+                return <Cast {...props} cast={cast} />;
+              }}
+            />
+            <Route
+              path={`${path}/reviews`}
+              render={props => {
+                return <Reviews {...props} reviews={reviews} />;
+              }}
+            />
           </div>
-        </div>
-
-        <hr />
-
-        <p>Addidition information</p>
-
-        <ul>
-          <li>
-            <NavLink
-              to={`${url}/cast`}
-              className="NavLink"
-              activeClassName="NavLink--active"
-            >
-              Cast
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to={`${url}/reviews`}
-              className="NavLink"
-              activeClassName="NavLink--active"
-            >
-              Reviews
-            </NavLink>
-          </li>
-        </ul>
-
-        <hr />
-
-        <Route
-          path={`${path}/cast`}
-          render={props => {
-            return <Cast {...props} cast={cast} />;
-          }}
-        />
-        <Route
-          path={`${path}/reviews`}
-          render={props => {
-            return <Reviews {...props} reviews={reviews} />;
-          }}
-        />
+        )}
       </>
     );
   }
@@ -143,4 +160,8 @@ export default MovieDetailsPageView;
 // 34. для добавлеия вложенного свойства Cast в запросе нужно добавить не _embed=credits (_expand=credits), а дополнительный параметр, указаный в доках на сайте &append_to_response=credits после. Смотрим в тулзах на компонент MovieDetailsPageView, на его state.
 // 35. нам нужно передать из MovieDetailsPageView в Cast id фильма, сделать это можно через СПЕЦИАЛЬНЫЙ проп render={props => <Cast {...props} /> }. Передавать нужно ф-цию, в которую будут приходить пропы раутера (history, location, match), они передаются автоматически, если мы передаём через component={}, а через рендер нужно вручную, на выходе наш тег с компонентом и в него распыляем эти пропсы и наш список Cast из стейта.
 // 36. повторяем с Review и переходим к этим компонентам
-('---');
+('Кнопка НАЗАД');
+// 57. добавляем кнопку
+// --- смотрим на props.history.push и .replace - нам нужно записать новую запись, взятую из истории
+// --- пример с onClick={() => this.props.history.push('/movies')}
+// --- надо рауту сказать с какого url мы пришли? -> MoviesList

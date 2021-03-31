@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+// import { Route } from 'react-router-dom';
 import Axios from 'axios';
-import SearchMovies from '../components/SearchMovies';
+import MoviesList from '../components/MoviesList';
+
+import m from './MoviesPageView.module.css';
 
 class MoviesPageView extends Component {
   state = {
@@ -14,12 +16,13 @@ class MoviesPageView extends Component {
   async componentDidUpdate() {
     const { API, mainUrl } = this.props;
     const { searchFilms, status } = this.state;
-    // const { filmQuery } = this.props;
+
     if (status === 'pending') {
       const searchQuery = await Axios.get(
         `${mainUrl}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
       );
       // console.log(searchQuery.data.results);
+
       this.setState({
         movies: searchQuery.data.results,
         status: 'resolved',
@@ -38,20 +41,18 @@ class MoviesPageView extends Component {
     e.preventDefault();
     const { formValue } = this.state;
 
-    // this.props.onSubmit(searchFilms);
     this.setState({
       searchFilms: formValue,
       status: 'pending',
     });
   };
-
   render() {
     const { movies } = this.state;
-    const { url, path } = this.props.match;
+    // const { url, path } = this.props.match;
     return (
-      <>
-        <div className="">
-          <form className="" onSubmit={this.handleSubmit}>
+      <div className={m.container}>
+        <div className={m.headBlock}>
+          <form className={m.formBar} onSubmit={this.handleSubmit}>
             <input
               type="text"
               name="name"
@@ -63,13 +64,8 @@ class MoviesPageView extends Component {
           </form>
         </div>
 
-        <Route
-          path={`${path}`}
-          render={props => {
-            return <SearchMovies {...props} movies={movies} url={url} />;
-          }}
-        />
-      </>
+        <MoviesList movies={movies} />
+      </div>
     );
   }
 }
@@ -127,10 +123,11 @@ export default MoviesPageView;
 // --- меняем статус на подтверждённый
 // --- пишем ответ в state.movies
 // --- очищаем форму
-// 45. рендерим с пропами <SearchMovies movies={this.state.movies} url={this.props.match.url} />
+// -> App
+('---');
+// -> 52. MoviesList
+// 45. рендерим с пропами <MoviesList movies={this.state.movies} url={this.props.match.url} />
 // 46. переделываем на внутреннюю маршрутизацию Route
 // --- в path мы используем динамику, но не match.url, а match.path
-// 47. переиспользуем компонент SearchMovies закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
-// 48.
-('---');
+// 47. переиспользуем компонент MoviesList закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
 // --- для законсоливания данных, можно использовать по данным в state или props метод .find()

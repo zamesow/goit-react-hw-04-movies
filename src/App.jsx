@@ -1,49 +1,38 @@
 import React from 'react';
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
+import AppBar from './components/AppBar';
 import HomePageView from './views/HomePageView';
 import MoviesPageView from './views/MoviesPageView';
 import MovieDetailsPageView from './views/MovieDetailsPageView';
 import NotFoundView from './views/NotFoundView';
-// import SearchMovies from './components/SearchMovies';
 
-import m from './App.module.css';
+import routes from './routes';
 
 const API = '4f24a465004dec8d1f65f162bb769c3a';
 const mainUrl = 'https://api.themoviedb.org/3';
 
 const App = () => (
   <>
-    <ul className={m.AppBar}>
-      <li>
-        <NavLink exact to="/" className={m.NavLink} activeClassName={m.active}>
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/movies" className={m.NavLink} activeClassName={m.active}>
-          Movies
-        </NavLink>
-      </li>
-    </ul>
+    <AppBar />
 
     <Switch>
       <Route
         exact
-        path="/"
+        path={routes.home}
         render={props => {
           return <HomePageView {...props} API={API} mainUrl={mainUrl} />;
         }}
       />
       <Route
         exact
-        path="/movies"
+        path={routes.movies}
         render={props => {
           return <MoviesPageView {...props} API={API} mainUrl={mainUrl} />;
         }}
       />
       <Route
-        path="/movies/:movieId"
+        path={routes.movieDetails}
         render={props => {
           return (
             <MovieDetailsPageView {...props} API={API} mainUrl={mainUrl} />
@@ -54,6 +43,10 @@ const App = () => (
     </Switch>
   </>
 );
+
+// рефакторинг
+// редирект (prop.history и )
+// разделение кода (причёсывание)
 
 // https://developers.themoviedb.org/3/trending/get-trending - список самых популярных фильмов на сегодня для создания коллекции на главной странице.
 // /trending/{movie}/{week}
@@ -97,3 +90,10 @@ export default App;
 // --- 'pending', - ожидание
 // --- 'resolved', - разрешение
 // --- 'rejected' - отклонение
+
+('Разделение кода');
+// 48. создаём и импортируем route.js для хранения маршрутов
+// --- прописываем динамику в Route path="{} и NavLink to={}
+// --- делаем AppBar и переносим туда нужные линки
+// --- импортируем AppBar и рендерим выше всех
+// -> AppBar
