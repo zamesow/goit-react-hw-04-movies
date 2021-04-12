@@ -8,26 +8,39 @@ import m from './MoviesPageView.module.css';
 class MoviesPageView extends Component {
   state = {
     formValue: '',
-    searchFilms: '',
     movies: [],
     status: 'idle',
   };
 
+  componentDidMount() {
+    const moviesList = localStorage.getItem('movies');
+    const formValueFromStorage = localStorage.getItem('formValue');
+    const parsedMovies = JSON.parse(moviesList);
+    const parsedFormValue = JSON.parse(formValueFromStorage);
+
+    if (parsedMovies) {
+      this.setState({ movies: parsedMovies });
+      this.setState({ formValue: parsedFormValue });
+    }
+  }
+
   async componentDidUpdate() {
     const { API, mainUrl } = this.props;
-    const { searchFilms, status } = this.state;
+    const { formValue, status } = this.state;
 
-    if (status === 'pending') {
+    if (status === 'pending' && formValue.length !== 0) {
       const searchQuery = await Axios.get(
-        `${mainUrl}/search/movie?api_key=${API}&language=en-US&query=${searchFilms}&page=1&include_adult=false`,
+        `${mainUrl}/search/movie?api_key=${API}&language=en-US&query=${formValue}&page=1&include_adult=false`,
       );
-      // console.log(searchQuery.data.results);
 
       this.setState({
         movies: searchQuery.data.results,
         status: 'resolved',
-        formValue: '',
+        // formValue: '',
       });
+
+      localStorage.setItem('movies', JSON.stringify(searchQuery.data.results));
+      localStorage.setItem('formValue', JSON.stringify(formValue));
     }
   }
 
@@ -39,13 +52,19 @@ class MoviesPageView extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { formValue } = this.state;
+    // const { formValue } = this.state;
 
     this.setState({
-      searchFilms: formValue,
       status: 'pending',
     });
   };
+
+  handleClear = () => {
+    this.setState({ formValue: '', movies: [], status: 'idle' });
+    localStorage.removeItem('movies');
+    localStorage.removeItem('formValue');
+  };
+
   render() {
     const { movies } = this.state;
     // const { url, path } = this.props.match;
@@ -53,6 +72,10 @@ class MoviesPageView extends Component {
       <div className={m.container}>
         <div className={m.headBlock}>
           <form className={m.formBar} onSubmit={this.handleSubmit}>
+            <button type="button" onClick={this.handleClear}>
+              Clear
+            </button>
+
             <input
               type="text"
               name="name"
@@ -69,7 +92,6 @@ class MoviesPageView extends Component {
     );
   }
 }
-
 export default MoviesPageView;
 
 // status:
@@ -115,7 +137,6 @@ export default MoviesPageView;
 // --- кнопка submit
 // 42. handleChange записывает в state значение {value} (с нижним регистром) в событии e.currentTarget
 // 43. handleSubmit должен иметь неперегружайку e.preventDefault();
-// --- достаёт значение formValue из state и переписывает его в searchFilms
 // --- переписывает статус на одидающий
 // 44. Т.к. у нас state перезаписывается каждый раз при изменениях в форме, то для запроса нужно использовать componentDidUpdate, потому что только в этом случае будет запрос последних изменений в форме
 // --- при componentDidUpdate нужно обязательно задать условие if () иначе цикличность
@@ -131,3 +152,12 @@ export default MoviesPageView;
 // --- в path мы используем динамику, но не match.url, а match.path
 // 47. переиспользуем компонент MoviesList закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
 // --- для законсоливания данных, можно использовать по данным в state или props метод .find()
+('КНОПКА НАЗАД');
+// 48. используем localStorage
+// --- условия те же, что и при запросе
+// --- при апдейте записываем в сторэдж this.state.movies и this.state.formValue
+// --- при маунте достаём из сторэджа и парсим
+// --- при условии наличия парса сетим по местам
+
+('КНОПКА CLEAR');
+// 50. удаляем данные в сторэдже и стейтим дэфолтные значения -> HomePageView

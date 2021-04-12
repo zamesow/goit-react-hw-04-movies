@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import AppBar from './components/AppBar';
-import HomePageView from './views/HomePageView';
-import MoviesPageView from './views/MoviesPageView';
-import MovieDetailsPageView from './views/MovieDetailsPageView';
-import NotFoundView from './views/NotFoundView';
 
 import routes from './routes';
+
+const HomePageView = lazy(() =>
+  import('./views/HomePageView' /* webpackChunkName: "home-page-view" */),
+);
+const MoviesPageView = lazy(() =>
+  import('./views/MoviesPageView' /* webpackChunkName: "movies-page-view" */),
+);
+const MovieDetailsPageView = lazy(() =>
+  import(
+    './views/MovieDetailsPageView' /* webpackChunkName: "movie-details-page-view" */
+  ),
+);
+const NotFoundPageView = lazy(() =>
+  import(
+    './views/NotFoundPageView' /* webpackChunkName: "not-found-page-view" */
+  ),
+);
 
 const API = '4f24a465004dec8d1f65f162bb769c3a';
 const mainUrl = 'https://api.themoviedb.org/3';
 
 const App = () => (
   <>
+    {/* <button type="button" onClick={() => HomePageView().then(console.log)}>
+      Загрузить HomePageView
+    </button> */}
+
     <AppBar />
 
     <Switch>
@@ -39,7 +56,7 @@ const App = () => (
           );
         }}
       />
-      <Route component={NotFoundView} />
+      <Route component={NotFoundPageView} />
     </Switch>
   </>
 );
@@ -69,7 +86,7 @@ export default App;
 // Cейчас мы можем вводитьадреса только руками, поэтому нам нужно сделатьнормальную навигацию. Если делать ссылку типа <a href="">, то будет перезагрузка браузера, нам это не нужно. Нам нужно только переписать url в адресной строке на тот, который мы укажем, а потом BrouserRouter увидит изменение и перерендерит страницу.
 
 // 10. Импортим Router.Link или { Link }, закинуть в рендер (можно в отдельные <li>), в проп to="" продублировать наши адреса и подписать их между тегами <Link></Link>, он под капотом сам отрендерит теги <a href="">, но изменит только адресную строку без перезагрузки страницы.
-// 11. Если перейдём на (пропишем) несуществующий путь, то нужно отрендерить отдельный компонент, создаём NotFoundView. Если не передать в него путь, то он будет рендериться всегда (если не передать путь во всех раутах, то все компоненты будут рендериться всегда). Поэтому ставим Switch, чтобы выбирался только один из.
+// 11. Если перейдём на (пропишем) несуществующий путь, то нужно отрендерить отдельный компонент, создаём NotFoundPageView. Если не передать в него путь, то он будет рендериться всегда (если не передать путь во всех раутах, то все компоненты будут рендериться всегда). Поэтому ставим Switch, чтобы выбирался только один из.
 // 12. Импортируем Router.Switch или { Switch }, обворачиваем им все наши рауты
 
 // 13. Для стилизации вместо Link используем NavLink, он использует 2 пропа для объекта инлайн-стилей (создаём const styles = {}) - базовый и активный, но мы будем использовать module.css, поэтому используем className и activeClassName, а styles удаляем.
@@ -97,3 +114,21 @@ export default App;
 // --- делаем AppBar и переносим туда нужные линки
 // --- импортируем AppBar и рендерим выше всех
 // -> AppBar
+
+('Динамический import');
+// 61. пробуем на ф-ции loader - создаём кнопку и грузим HomePageView для примера
+// создаём анонимку loader = () => import('./views/HomePageView');
+// --- в кнопке по onClick={() => loader()} одно и то же, что {() => import('./views/HomePageView')}
+// --- динамический импорт возвращает промис, поэтому к нему можно добавить .then(console.log)
+// --- коментим статический импорт для Home и его раут
+// --- получается, что ДИ позволяет ассинхронно загружать куски кода, а webpack разбивает их на отдельные части (чанки, чанкование)
+
+('Suspense, lazy - 01:01:30');
+// 62. в реакте есть готовые методы, поэтому import React, {Suspense, lazy}
+// кнопку Home можем убрать
+// --- при использовании чанкования статический импорт нужно удалить, потому что webpack всё равно включит его в бандл, он видит, что это синхронная зависимость
+// --- у lazy другой синтаксис от loader (loader типа вставляем в lazy), всегда есть доки реакта lazy(() => import('./views/HomePageView'));
+// --- т.е. мы передаём анонимку, которая возвращает промис.
+// --- мы можем наблюдать, как gjckt билда в build/static/js появились новые чанки
+// --- то же самое проделываем с остальными компонентами (вьюшками) - добавляем lazy и удаляем статику
+// для того, чтобы узнать какой чанк за какой компонент отвечает нужно во внутрь импорта через пробел вставить комментарий, например для home-page: /* webpackChunkName: "home-page" */

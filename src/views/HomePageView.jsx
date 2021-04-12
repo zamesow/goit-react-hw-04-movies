@@ -19,6 +19,11 @@ class HomePageView extends Component {
     // console.log(response.data.results);
 
     this.setState({ movies: response.data.results });
+
+    // if (prevState.movies !== this.state.movies) {    ша (зкумЫефеуюьщмшуы !== ершыюыефеуюьщмшуы) Х
+    localStorage.removeItem('movies');
+    localStorage.removeItem('formValue');
+    // }    Ъ
   }
 
   render() {
@@ -41,3 +46,4 @@ export default HomePageView;
 // --- в Link нужно добавить "movies" потому что в match.url уже не "/movies", а просто "/"
 // --- API выносим в App и передаём сюда пропсом
 // 47. переиспользуем компонент MoviesList закидывая в него такие же пропсы как и в MoviesPageView, но с другим пропсом url={}
+// 51. удаляем данные в сторэдже

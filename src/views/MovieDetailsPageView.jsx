@@ -3,6 +3,7 @@ import { NavLink, Route } from 'react-router-dom';
 import Cast from '../components/Cast';
 import Reviews from '../components/Reviews';
 import Axios from 'axios';
+import routes from '../routes';
 
 import m from './MovieDetailsPageView.module.css';
 
@@ -39,6 +40,18 @@ class MovieDetailsPageView extends Component {
     });
   }
 
+  handleGoBack = () => {
+    const { history, location } = this.props;
+
+    if (location.state && location.state.from) {
+      return history.push(location.state.from);
+    }
+
+    history.push(routes.movies);
+
+    // history.push(location?.state?.from || routes.movies);
+  };
+
   render() {
     const {
       title,
@@ -50,18 +63,20 @@ class MovieDetailsPageView extends Component {
       cast,
       reviews,
     } = this.state;
+    const { movies } = this.props;
     const { url, path } = this.props.match;
     const imgUrl = poster_path;
     const voteAverageInPercent = vote_average * 10 + '%';
     // console.log(release_date.slice(0, 4));
     // console.log(`send:`, cast);
-
+    // console.log(this.props.location.state.from);
     return (
       <>
         <button
           className={m.backBtn}
           type="button"
-          onClick={() => this.props.history.push('/movies')}
+          onClick={this.handleGoBack}
+          movies={movies}
         >
           Назад
         </button>
@@ -163,5 +178,14 @@ export default MovieDetailsPageView;
 ('Кнопка НАЗАД');
 // 57. добавляем кнопку
 // --- смотрим на props.history.push и .replace - нам нужно записать новую запись, взятую из истории
-// --- пример с onClick={() => this.props.history.push('/movies')}
-// --- надо рауту сказать с какого url мы пришли? -> MoviesList
+// --- пример с onClick={() => this.props.history.push('/')}
+// --- надо рауту MovieDetailsPageView сказать с какого url мы пришли? -> MoviesList
+// 59. проверяем с какого url приходим console.log(this.props.location.state.from);
+// --- прописываем в onClick={() => this.props.history.push(this.props.location.state.from)}
+// --- dsyjcbv это в отдельный метод handleGoBack
+// 60. что делать, если пользователь зашел по конечному адресу с пустой страницы?
+// --- в таком случае будет location.state: undefined
+// --- в handleGoBack пушим при выполнении условия проверки на if(location.state && location.state.from)
+// --- если условие не выполняется, то перекидываем на страницу запроса (через готовый импортированный раут)
+// --- так же есть современный метод проверки вложенных свойств с помощью оператора "?.", но в результируещем бандле rjд будет больше, поэтому пока новые технологии не вошли в обиход, лучше писать по олдскульному
+// -> App
