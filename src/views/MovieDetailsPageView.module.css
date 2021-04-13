@@ -1,0 +1,25 @@
+.MovieDetails {
+  display: flex;
+  margin-left: 50px;
+  margin-right: 350px;
+}
+
+.description {
+  margin-left: 50px;
+  /* border: 1px solid blue; */
+}
+
+.genres {
+  padding: 0px;
+  list-style-type: none;
+}
+
+.genres li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.backBtn {
+  margin-left: 50px;
+  margin-bottom: 50px;
+}

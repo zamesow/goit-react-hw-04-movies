@@ -1,0 +1,17 @@
+.container {
+  margin: 50px;
+  /* border: solid 1px tomato; */
+}
+
+/* .subcontainer {
+  padding: 0;
+  margin: 0;
+} */
+
+.headBlock {
+  text-align: center;
+}
+
+.formBar {
+  margin-bottom: 50px;
+}
