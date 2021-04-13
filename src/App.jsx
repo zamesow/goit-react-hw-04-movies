@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import AppBar from './components/AppBar';
@@ -27,55 +27,41 @@ const mainUrl = 'https://api.themoviedb.org/3';
 
 const App = () => (
   <>
-    {/* <button type="button" onClick={() => HomePageView().then(console.log)}>
-      Загрузить HomePageView
-    </button> */}
-
     <AppBar />
 
-    <Switch>
-      <Route
-        exact
-        path={routes.home}
-        render={props => {
-          return <HomePageView {...props} API={API} mainUrl={mainUrl} />;
-        }}
-      />
-      <Route
-        exact
-        path={routes.movies}
-        render={props => {
-          return <MoviesPageView {...props} API={API} mainUrl={mainUrl} />;
-        }}
-      />
-      <Route
-        path={routes.movieDetails}
-        render={props => {
-          return (
-            <MovieDetailsPageView {...props} API={API} mainUrl={mainUrl} />
-          );
-        }}
-      />
-      <Route component={NotFoundPageView} />
-    </Switch>
+    <Suspense fallback={<h1>Загружаем...</h1>}>
+      <Switch>
+        <Route
+          exact
+          path={routes.home}
+          render={props => {
+            return <HomePageView {...props} API={API} mainUrl={mainUrl} />;
+          }}
+        />
+        <Route
+          exact
+          path={routes.movies}
+          render={props => {
+            return <MoviesPageView {...props} API={API} mainUrl={mainUrl} />;
+          }}
+        />
+        <Route
+          path={routes.movieDetails}
+          render={props => {
+            return (
+              <MovieDetailsPageView {...props} API={API} mainUrl={mainUrl} />
+            );
+          }}
+        />
+        <Route component={NotFoundPageView} />
+      </Switch>
+    </Suspense>
   </>
 );
 
-// рефакторинг
-// редирект (prop.history и )
-// разделение кода (причёсывание)
-
-// https://developers.themoviedb.org/3/trending/get-trending - список самых популярных фильмов на сегодня для создания коллекции на главной странице.
-// /trending/{movie}/{week}
-
-// https://developers.themoviedb.org/3/search/search-movies - поиск кинофильма по ключевому слову на странице фильмов.
-// https://developers.themoviedb.org/3/movies/get-movie-details - запрос полной информации о фильме для страницы кинофильма.
-// https://developers.themoviedb.org/3/movies/get-movie-credits - запрос информации о актёрском составе для страницы кинофильма.
-// https://developers.themoviedb.org/3/movies/get-movie-reviews - запрос обзоров для страницы кинофильма.
-
 export default App;
 
-// нам нужно спроэктировать приложение, сделать маршруты, создаём ф-цию
+// App.jsx - нам нужно спроэктировать приложение, сделать маршруты, создаём ф-цию
 // 4. импорт { Route }
 // 5. рендерим раут передавая в него адрес и компонент как ссылку (страница вьюха)
 // 6. создаём вьюху HomePageView, импортируем её
@@ -132,3 +118,7 @@ export default App;
 // --- мы можем наблюдать, как gjckt билда в build/static/js появились новые чанки
 // --- то же самое проделываем с остальными компонентами (вьюшками) - добавляем lazy и удаляем статику
 // для того, чтобы узнать какой чанк за какой компонент отвечает нужно во внутрь импорта через пробел вставить комментарий, например для home-page: /* webpackChunkName: "home-page" */
+// --- lazy работает внутри Suspense api. Когда рендерится ленивый компонент, например HomePageView при рендере раута, то он должен быть обёрнут в компонент Suspense, это т.н. контейнер для ленивых компонентов
+// --- его можно сделать один вокруг <Suspense><Switch></Switch></Suspense>
+// --- так же есть специальный проп fallback={<Spinner />} - он отобразит что-то, пока компонент загружается, например спиннер, а пишем как jsx-тег на другой компонент
+//  63. Cast и Reviews тоже можно обернуть в lazy, но нужно учитывать то, что если компоненты очень малы, то разбиение может ухучшить ситуацию -> MovieDetailsPageView

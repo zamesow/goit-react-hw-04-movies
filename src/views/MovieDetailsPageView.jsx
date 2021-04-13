@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { NavLink, Route } from 'react-router-dom';
-import Cast from '../components/Cast';
-import Reviews from '../components/Reviews';
 import Axios from 'axios';
 import routes from '../routes';
 
 import m from './MovieDetailsPageView.module.css';
+
+const Cast = lazy(() =>
+  import('../components/Cast' /* webpackChunkName: "cast" */),
+);
+
+const Reviews = lazy(() =>
+  import('../components/Reviews' /* webpackChunkName: "reviews" */),
+);
 
 class MovieDetailsPageView extends Component {
   state = {
@@ -105,11 +111,8 @@ class MovieDetailsPageView extends Component {
                 </ul>
               </div>
             </div>
-
             <hr />
-
             <p>Addidition information</p>
-
             <ul>
               <li>
                 <NavLink
@@ -130,21 +133,21 @@ class MovieDetailsPageView extends Component {
                 </NavLink>
               </li>
             </ul>
-
             <hr />
-
-            <Route
-              path={`${path}/cast`}
-              render={props => {
-                return <Cast {...props} cast={cast} />;
-              }}
-            />
-            <Route
-              path={`${path}/reviews`}
-              render={props => {
-                return <Reviews {...props} reviews={reviews} />;
-              }}
-            />
+            <Suspense>
+              <Route
+                path={`${path}/cast`}
+                render={props => {
+                  return <Cast {...props} cast={cast} />;
+                }}
+              />
+              <Route
+                path={`${path}/reviews`}
+                render={props => {
+                  return <Reviews {...props} reviews={reviews} />;
+                }}
+              />
+            </Suspense>
           </div>
         )}
       </>
@@ -189,3 +192,8 @@ export default MovieDetailsPageView;
 // --- если условие не выполняется, то перекидываем на страницу запроса (через готовый импортированный раут)
 // --- так же есть современный метод проверки вложенных свойств с помощью оператора "?.", но в результируещем бандле rjд будет больше, поэтому пока новые технологии не вошли в обиход, лучше писать по олдскульному
 // -> App
+
+('Suspense, lazy - 01:13:00');
+// 63. import {Suspense, lazy}
+// --- удаляем статические импорты и добавляем lazy()
+// --- обворачивать в <Suspense> можно рауты или конкретно добавляемые компоненты
