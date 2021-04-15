@@ -13,3 +13,7 @@ export default {
 // /movies/:movieId/reviews - компонент <Reviews>, информация об обзорах. Рендерится на странице <MovieDetailsPage>.
 
 // делаем экспорт для маршрутов (cast и reviews - это вложенная навигация)
+
+('Slug');
+// меняем movieDetails: '/movies/:movieId' на '/movies/:slug',
+// то же самое делаем и в -> MovieDetailsPageView

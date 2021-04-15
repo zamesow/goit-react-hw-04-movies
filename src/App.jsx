@@ -22,9 +22,6 @@ const NotFoundPageView = lazy(() =>
   ),
 );
 
-const API = '4f24a465004dec8d1f65f162bb769c3a';
-const mainUrl = 'https://api.themoviedb.org/3';
-
 const App = () => (
   <>
     <AppBar />
@@ -35,22 +32,20 @@ const App = () => (
           exact
           path={routes.home}
           render={props => {
-            return <HomePageView {...props} API={API} mainUrl={mainUrl} />;
+            return <HomePageView {...props} />;
           }}
         />
         <Route
           exact
           path={routes.movies}
           render={props => {
-            return <MoviesPageView {...props} API={API} mainUrl={mainUrl} />;
+            return <MoviesPageView {...props} />;
           }}
         />
         <Route
           path={routes.movieDetails}
           render={props => {
-            return (
-              <MovieDetailsPageView {...props} API={API} mainUrl={mainUrl} />
-            );
+            return <MovieDetailsPageView {...props} />;
           }}
         />
         <Route component={NotFoundPageView} />

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import { withRoutetr } from 'react-router-dom';
-import Axios from 'axios';
+import fetchMovie from '../services/fetch-api';
 import MoviesList from '../components/MoviesList';
 import m from './MoviesPageView.module.css';
 
@@ -10,20 +9,12 @@ class HomePageView extends Component {
   };
 
   async componentDidMount() {
-    const { API, mainUrl } = this.props;
-    // console.log(this.props);
-
-    const response = await Axios.get(
-      `${mainUrl}/trending/movie/week?api_key=${API}`,
-    );
-    // console.log(response.data.results);
+    const response = await fetchMovie();
 
     this.setState({ movies: response.data.results });
 
-    // if (prevState.movies !== this.state.movies) {    ша (зкумЫефеуюьщмшуы !== ершыюыефеуюьщмшуы) Х
     localStorage.removeItem('movies');
     localStorage.removeItem('formValue');
-    // }    Ъ
   }
 
   render() {

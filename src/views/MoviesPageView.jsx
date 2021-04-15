@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import { Route } from 'react-router-dom';
-import Axios from 'axios';
+import fetchMovie from '../services/fetch-api';
 import MoviesList from '../components/MoviesList';
 
 import m from './MoviesPageView.module.css';
@@ -25,18 +24,14 @@ class MoviesPageView extends Component {
   }
 
   async componentDidUpdate() {
-    const { API, mainUrl } = this.props;
     const { formValue, status } = this.state;
 
     if (status === 'pending' && formValue.length !== 0) {
-      const searchQuery = await Axios.get(
-        `${mainUrl}/search/movie?api_key=${API}&language=en-US&query=${formValue}&page=1&include_adult=false`,
-      );
+      const searchQuery = await fetchMovie(formValue);
 
       this.setState({
         movies: searchQuery.data.results,
         status: 'resolved',
-        // formValue: '',
       });
 
       localStorage.setItem('movies', JSON.stringify(searchQuery.data.results));
@@ -52,7 +47,6 @@ class MoviesPageView extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // const { formValue } = this.state;
 
     this.setState({
       status: 'pending',
@@ -67,7 +61,6 @@ class MoviesPageView extends Component {
 
   render() {
     const { movies } = this.state;
-    // const { url, path } = this.props.match;
     return (
       <div className={m.container}>
         <div className={m.headBlock}>
@@ -99,6 +92,7 @@ export default MoviesPageView;
 // --- 'pending', - ожидание
 // --- 'resolved', - разрешение
 // --- 'rejected' - отклонение
+
 ('---');
 // 16. Для запроса нам нужен class и state для записи
 // 17. Для запросов импортируем Axios и делаем запрос, когда наш компонент маунтится (нажимаем на ссылку => меняется url в адресной строке => BrowserRouter реагирует и вызывает (маунтит) наш компонент MoviesPageView)

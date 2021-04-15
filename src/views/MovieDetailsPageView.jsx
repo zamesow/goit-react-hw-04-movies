@@ -1,6 +1,7 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { NavLink, Route } from 'react-router-dom';
-import Axios from 'axios';
+// import Axios from 'axios';
+import fetchMovie from '../services/fetch-api';
 import routes from '../routes';
 
 import m from './MovieDetailsPageView.module.css';
@@ -26,21 +27,18 @@ class MovieDetailsPageView extends Component {
   };
 
   async componentDidMount() {
-    const { API, mainUrl } = this.props;
     const { movieId } = this.props.match.params;
-    const creditsAndReviews = 'append_to_response=credits,reviews';
 
-    const response = await Axios.get(
-      `${mainUrl}/movie/${movieId}?api_key=${API}&${creditsAndReviews}&language=en-US`,
-    );
-
-    // console.log(response.data);
+    const response = await fetchMovie(false, movieId);
+    // console.log(response.data.credits);
     // console.log(response.data.reviews.results);
+
+    const posterPath =
+      'https://image.tmdb.org/t/p/w300' + response.data.poster_path;
 
     this.setState({
       ...response.data,
-      poster_path:
-        'https://image.tmdb.org/t/p/w300' + response.data.poster_path,
+      poster_path: posterPath,
       cast: response.data.credits.cast,
       reviews: response.data.reviews.results,
     });
@@ -86,6 +84,7 @@ class MovieDetailsPageView extends Component {
         >
           Назад
         </button>
+
         {title && (
           <div>
             <div className={m.MovieDetails}>
@@ -197,3 +196,9 @@ export default MovieDetailsPageView;
 // 63. import {Suspense, lazy}
 // --- удаляем статические импорты и добавляем lazy()
 // --- обворачивать в <Suspense> можно рауты или конкретно добавляемые компоненты
+
+('Slug');
+// меняем проп movieId на { slug } = this.props.match.params;
+// меняем в запросе movieId на slug
+
+// note // ! проверить routes.cast и routes.review
