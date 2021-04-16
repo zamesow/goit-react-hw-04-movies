@@ -117,3 +117,31 @@ export default App;
 // --- его можно сделать один вокруг <Suspense><Switch></Switch></Suspense>
 // --- так же есть специальный проп fallback={<Spinner />} - он отобразит что-то, пока компонент загружается, например спиннер, а пишем как jsx-тег на другой компонент
 //  63. Cast и Reviews тоже можно обернуть в lazy, но нужно учитывать то, что если компоненты очень малы, то разбиение может ухучшить ситуацию -> MovieDetailsPageView
+
+('Slug'); // 70. доп.занятие
+// Свойство location.state
+// Слаги
+// --- [https://dev.to/fayazara/this-free-tools-for-developers-are-45p3]
+// --- `slugify` пакет для создания слагов [https://www.npmjs.com/package/slugify]
+// --- regexp101 [https://regex101.com/]
+
+// React Query
+// --- Ищите туториалы по react query v3
+// --- React Hook Form
+
+// Slug - когда в url используется не id ресурса, а красивая строка с добавленым вконце id-шником
+// --- удобство в lowercase и тире между словами вместо символов, а вконце id
+// --- удобнее для seo
+// --- закидывается slugidy('любая строка') и на выходе получаем [любая-строка]
+// --- можно передать любой объект настроек:
+
+// --- slugidy('любая строка', {
+//        replacement: '-', // чем разделяем
+//        remove: undefined, // что убираем
+//        lower: false, // нижний регистр, нам нужен true
+//        strict: false, // убрать препинания типа запятых, нам нужен true
+//        localea: 'vi' // чем разделяем
+//      });
+// -> MoviesList
+
+// note // ! https://getquick.link/

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import fetchMovie from '../services/fetch-api';
+import { getSearchingMovies } from '../services/fetch-api';
 import MoviesList from '../components/MoviesList';
 
 import m from './MoviesPageView.module.css';
@@ -27,14 +27,15 @@ class MoviesPageView extends Component {
     const { formValue, status } = this.state;
 
     if (status === 'pending' && formValue.length !== 0) {
-      const searchQuery = await fetchMovie(formValue);
-
-      this.setState({
-        movies: searchQuery.data.results,
-        status: 'resolved',
+      // const searchQuery = await fetchMovie(formValue);
+      getSearchingMovies(formValue).then(searchingMovies => {
+        this.setState({
+          movies: searchingMovies,
+          status: 'resolved',
+        }),
+          localStorage.setItem('movies', JSON.stringify(searchingMovies));
       });
 
-      localStorage.setItem('movies', JSON.stringify(searchQuery.data.results));
       localStorage.setItem('formValue', JSON.stringify(formValue));
     }
   }
