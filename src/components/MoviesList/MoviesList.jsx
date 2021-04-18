@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import MoviePreview from '../MoviePreview/MoviePreview';
-// import slugify from 'slugify';
+import slugify from 'slugify';
 import m from './MoviesList.module.css';
 
-// const makeSlug = string => slugify(string, { lower: true });
+const makeSlug = string => slugify(string, { lower: true, strict: false });
 
 const MoviesList = ({ movies, location }) => {
   return (
@@ -13,8 +13,8 @@ const MoviesList = ({ movies, location }) => {
         <li key={id} className={m.item}>
           <Link
             to={{
-              // pathname: `/movies/${makeSlug(`${title} ${id}`)}`,
-              pathname: `/movies/${id}`,
+              pathname: `/movies/${makeSlug(`${title} ${id}`)}`,
+              // pathname: `/movies/${id}`,
               state: { from: location },
             }}
           >
@@ -54,13 +54,17 @@ export default withRouter(MoviesList);
 // --- state: {from: location} - проп, принятый {параметрах}, а чтоб он принялся нужен withRouter
 // --- теперь видим в location.state.from.pathname запись последнего url -> MovieDetailsPageView
 
-('Slug');
-// -> MoviePreview
+('Slug'); // -> App
+
+// 71.npm i slugify
+// --- import slugify from 'slugify';
+// --- рендерим для примера все названия фильмов {slugify(title)}
+// --- пробуем с объектом настроек
+// --- передаём вконце id
+// --- убираем импорт и рендер slugify
 // 72. импортируем и рендерим наш slugify в pathname: `/movies/${slugify(`${title} ${id}`, { lower: true })}`,
 // --- причёсываем, вынося в отдельныю ф-цию
 // 73. если мы теперь перейдём в карточку фильма, то в url у нас будет /movies/godzilla-vs.-kong-399566, поэтому перейти не сможем, т.к. в routes у нас записано /movies/:movieId
 // --- меняем на /movies/:slug
 
-// 74. нам нужно вытащить id с этого слага
-// --- мы не може заранее знать сколько будет символов после /movies/
-// --- нужно написать регулярное выражение
+// -> MoviesDetailsPageView

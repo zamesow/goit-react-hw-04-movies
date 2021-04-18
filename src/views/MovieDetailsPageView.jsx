@@ -1,7 +1,7 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { NavLink, Route } from 'react-router-dom';
 // import Axios from 'axios';
-import fetchMovie from '../services/fetch-api';
+import { getCastAndReviews, IMG_URL } from '../services/fetch-api';
 import routes from '../routes';
 
 import m from './MovieDetailsPageView.module.css';
@@ -27,31 +27,42 @@ class MovieDetailsPageView extends Component {
   };
 
   async componentDidMount() {
-    const { movieId } = this.props.match.params;
+    const { location } = this.props;
+    const { slug } = this.props.match.params;
 
-    const response = await fetchMovie(false, movieId);
-    // console.log(response.data.credits);
-    // console.log(response.data.reviews.results);
+    const movieId = slug.match(/[a-z0-9]+$/)[0];
 
-    const posterPath =
-      'https://image.tmdb.org/t/p/w300' + response.data.poster_path;
+    getCastAndReviews(movieId).then(castAndReviews =>
+      this.setState({
+        ...castAndReviews,
+        poster_path: IMG_URL + castAndReviews.poster_path,
+        cast: castAndReviews.credits.cast,
+        reviews: castAndReviews.reviews.results,
+      }),
+    );
 
-    this.setState({
-      ...response.data,
-      poster_path: posterPath,
-      cast: response.data.credits.cast,
-      reviews: response.data.reviews.results,
-    });
+    // пишем в локалсторэдж, потому что при Cast или Reviews меняется url и возвращает не туда
+    if (location.state && location.state.from) {
+      localStorage.setItem('lastPage', JSON.stringify(location.state.from));
+      // console.log(location.state.from);
+    }
   }
 
   handleGoBack = () => {
-    const { history, location } = this.props;
+    const { history } = this.props;
 
-    if (location.state && location.state.from) {
-      return history.push(location.state.from);
+    // if (location.state && location.state.from) {
+    //   return history.push(location.state.from);
+    // }
+
+    // берём из локалсторэдж, потому что при Cast или Reviews меняется url и возвращает не туда
+    const lastPage = localStorage.getItem('lastPage');
+    const parsedLastPage = JSON.parse(lastPage);
+
+    if (parsedLastPage) {
+      // console.log(parsedLastPage);
+      return history.push(parsedLastPage || routes.movies);
     }
-
-    history.push(routes.movies);
 
     // history.push(location?.state?.from || routes.movies);
   };
@@ -76,6 +87,10 @@ class MovieDetailsPageView extends Component {
     // console.log(this.props.location.state.from);
     return (
       <>
+        {/* <Link to={location?.state?.from ?? routes.movies}>
+          {location?.state?.from ?? 'Назад'}
+        </Link> */}
+
         <button
           className={m.backBtn}
           type="button"
@@ -111,7 +126,9 @@ class MovieDetailsPageView extends Component {
               </div>
             </div>
             <hr />
+
             <p>Addidition information</p>
+
             <ul>
               <li>
                 <NavLink
@@ -122,6 +139,7 @@ class MovieDetailsPageView extends Component {
                   Cast
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
                   to={`${url}/reviews`}
@@ -132,7 +150,9 @@ class MovieDetailsPageView extends Component {
                 </NavLink>
               </li>
             </ul>
+
             <hr />
+
             <Suspense>
               <Route
                 path={`${path}/cast`}
@@ -189,7 +209,10 @@ export default MovieDetailsPageView;
 // --- в таком случае будет location.state: undefined
 // --- в handleGoBack пушим при выполнении условия проверки на if(location.state && location.state.from)
 // --- если условие не выполняется, то перекидываем на страницу запроса (через готовый импортированный раут)
-// --- так же есть современный метод проверки вложенных свойств с помощью оператора "?.", но в результируещем бандле rjд будет больше, поэтому пока новые технологии не вошли в обиход, лучше писать по олдскульному
+// --- так же есть современный метод проверки вложенных свойств с помощью оператора "?.", но в результируещем бандле код будет больше, поэтому пока новые технологии не вошли в обиход, лучше писать по олдскульному
+// так же можно использовать не метод handleGoBack и кнопку, а ссылку <Link to={location?.state?.from ?? routes.movies}>{location?.state?.from ?? 'Назад'}</Link>
+
+// из-за изменений в url при раутах Cast или Review и при нажатии на кнопку НАЗАД нас выкидывает не на страницу назад, а всегда на routes.movies, поэтому используем запись в локалсторэдж
 // -> App
 
 ('Suspense, lazy - 01:13:00');
@@ -200,5 +223,18 @@ export default MovieDetailsPageView;
 ('Slug');
 // меняем проп movieId на { slug } = this.props.match.params;
 // меняем в запросе movieId на slug
+
+// 74. нам нужно вытащить id с этого слага
+// --- мы не може заранее знать сколько будет символов после /movies/
+// --- нужно написать регулярное выражение
+// --- переходим в regex101.com
+// --- вписываем наш url в test string
+// --- в regular expression вписываем условие выражения [a-z0-9]+$ (группа из букв и цифр на которую заканчивается строка)
+// --- можем прверить console.log(slug.match(/[a-z0-9]+$/));
+// --- .match() возвращает первое совпадение по заданому паттерну (регулярному выражению)
+// --- из-за того, что нам приходит массив данных, нам нужен элемент под индексом [0]
+// 75. вписываем наше выражение в переменную const movieId = slug.match(/[a-z0-9]+$/)[0];
+// --- меняем далее slug сново на movieId
+// --- лучше делать отдельную ф-цию типа slagGet
 
 // note // ! проверить routes.cast и routes.review

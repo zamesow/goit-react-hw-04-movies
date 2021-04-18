@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import fetchMovie from '../services/fetch-api';
+import { getTrendingMovies } from '../services/fetch-api';
 import MoviesList from '../components/MoviesList';
 import m from './MoviesPageView.module.css';
 
@@ -9,9 +9,7 @@ class HomePageView extends Component {
   };
 
   async componentDidMount() {
-    const response = await fetchMovie();
-
-    this.setState({ movies: response.data.results });
+    getTrendingMovies().then(res => this.setState({ movies: res }));
 
     localStorage.removeItem('movies');
     localStorage.removeItem('formValue');
