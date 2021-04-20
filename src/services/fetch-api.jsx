@@ -7,7 +7,7 @@ export const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.params = {
   api_key: API_KEY,
-  language: 'en-US',
+  language: 'ru-RU',
 };
 
 // запрос на карточку фильма

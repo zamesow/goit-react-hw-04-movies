@@ -1,5 +1,5 @@
 export default {
-  home: '/',
+  home: '/goit-react-hw-04-movies/',
   movies: '/movies',
   movieDetails: '/movies/:slug',
   // cast: '/movies/:movieId/cast',

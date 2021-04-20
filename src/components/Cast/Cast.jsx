@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import m from './Cast.module.css';
+import userpic from '../../styles/userpic.jpeg';
 
 class Cast extends Component {
   render() {
@@ -12,7 +13,11 @@ class Cast extends Component {
             <li className={m.castItem} key={id}>
               <img
                 className={m.pic}
-                src={`https://image.tmdb.org/t/p/w500${profile_path}`}
+                src={
+                  profile_path
+                    ? `https://image.tmdb.org/t/p/w500${profile_path}`
+                    : userpic
+                }
                 alt=""
               />
               <p className={m.name}>{original_name}</p>
@@ -27,3 +32,6 @@ class Cast extends Component {
 export default Cast;
 
 // 37. рендерим пришедший пропс (почему-то не работает с ф-цией, а только с классом), повторяем в Review
+
+// добавили userpic
+// --- src при наличии profile_path либо адрес картинки, либо наш userpic
