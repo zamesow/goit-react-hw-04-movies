@@ -146,3 +146,4 @@ export default App;
 
 // note // ! https://getquick.link/
 // "homepage": "https://zamesow.github.io/goit-react-hw-04-movies/"
+// comment for new commit
